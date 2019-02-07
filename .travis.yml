@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - 7.3
+  - nightly
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  fast_finish: true
+
+install:
+  - travis_retry composer update --no-progress --profile --no-scripts --no-suggest
+
+script:
+   - ./vendor/bin/grumphp run

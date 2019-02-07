@@ -1,0 +1,62 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Phpro\PreciseMath\ExpressionLanguage;
+
+use Phpro\PreciseMath\Exception\SyntaxError;
+
+final class Lexer
+{
+    public function parse(string $expression)
+    {
+        $expression = str_replace(["\r", "\n", "\t", "\v", "\f"], ' ', $expression);
+        $cursor = 0;
+        $tokens = [];
+        $brackets = [];
+        $end = \mb_strlen($expression);
+
+        while ($cursor < $end) {
+            if (' ' === $expression[$cursor]) {
+                ++$cursor;
+                continue;
+            }
+
+            if (preg_match('/[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/A', $expression, $match, 0, $cursor)) {
+                // numbers: float, int + scientific notation
+                $number = $match[0];
+                $tokens[] = new Token(Token::NUMBER_TYPE, $number, $cursor + 1);
+                $cursor += \mb_strlen($match[0]);
+            } elseif ('(' === $expression[$cursor]) {
+                $brackets[] = [$expression[$cursor], $cursor];
+                $tokens[] = new Token(Token::PUNCTUATION_TYPE, $expression[$cursor], $cursor + 1);
+                ++$cursor;
+            } elseif (')' === $expression[$cursor]) {
+                if (empty($brackets)) {
+                    throw SyntaxError::fromExpressionCursor('Unexpected ")"', $cursor, $expression);
+                }
+
+                array_pop($brackets);
+                $tokens[] = new Token(Token::PUNCTUATION_TYPE, $expression[$cursor], $cursor + 1);
+                ++$cursor;
+            } elseif (false !== mb_strpos('+-*/%', $expression[$cursor])) {
+                $tokens[] = new Token(Token::OPERATOR_TYPE, $expression[$cursor], $cursor + 1);
+                ++$cursor;
+            } else {
+                throw SyntaxError::fromExpressionCursor('Unexpected character "'.$expression[$cursor].'"', $cursor, $expression);
+            }
+        }
+
+        $tokens[] = Token::eof($cursor + 1);
+        if (!empty($brackets)) {
+            [$expect, $bracketCursor] = array_pop($brackets);
+            throw SyntaxError::fromExpressionCursor(
+                sprintf('Unclosed "%s"', $expect),
+                $bracketCursor,
+                $expression
+            );
+        }
+
+        return new TokenStream($tokens, $expression);
+    }
+}
