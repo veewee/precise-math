@@ -60,21 +60,16 @@ final class TokenStream
         $this->current = $this->tokens[$this->position];
     }
 
-    public function expect(string $type, string $value = null, string $message = null): void
+    public function expect(string $type, ?string $value = null, ?string $message = null): void
     {
         $token = $this->current;
         if (!$token->test($type, $value)) {
-            throw SyntaxError::fromExpressionCursor(
-                sprintf(
-                    '%sUnexpected token "%s" of value "%s" ("%s" expected%s)',
-                    $message ? $message.'. ' : '',
-                    $token->type(),
-                    $token->value(),
-                    $type,
-                    $value ? sprintf(' with value "%s"', $value) : ''
-                ),
-                $token->cursor(),
-                $this->expression
+            throw SyntaxError::unexpectedTokenFromExpectation(
+                $token,
+                $this->expression,
+                $type,
+                $value,
+                $message
             );
         }
         $this->next();

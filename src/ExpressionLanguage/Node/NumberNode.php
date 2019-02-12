@@ -9,35 +9,17 @@ use Phpro\PreciseMath\Model\Number;
 final class NumberNode implements NodeInterface
 {
     /**
-     * @var NodeInterface[]
+     * @var Number
      */
-    private $nodes;
+    private $value;
 
-    /**
-     * @var array
-     */
-    private $attributes;
-
-    public function __construct(Number $number)
+    public function __construct(Number $value)
     {
-        $this->nodes = [];
-        $this->attributes = [
-            'value' => $number,
-        ];
-    }
-
-    public function nodes(): array
-    {
-        return $this->nodes;
-    }
-
-    public function attributes(): array
-    {
-        return $this->attributes;
+        $this->value = $value;
     }
 
     public function evaluate(): Number
     {
-        return $this->attributes()['value'];
+        return $this->value;
     }
 }

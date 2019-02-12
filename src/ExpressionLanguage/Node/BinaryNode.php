@@ -4,47 +4,38 @@ declare(strict_types=1);
 
 namespace Phpro\PreciseMath\ExpressionLanguage\Node;
 
+use Phpro\PreciseMath\Exception\SyntaxError;
 use Phpro\PreciseMath\Model\Number;
 
 final class BinaryNode implements NodeInterface
 {
     /**
-     * @var NodeInterface[]
+     * @var string
      */
-    private $nodes;
+    private $operator;
 
     /**
-     * @var array
+     * @var NodeInterface
      */
-    private $attributes;
+    private $left;
+
+    /**
+     * @var NodeInterface
+     */
+    private $right;
 
     public function __construct(string $operator, NodeInterface $left, NodeInterface $right)
     {
-        $this->nodes = [
-            'left' => $left,
-            'right' => $right,
-        ];
-        $this->attributes = [
-            'operator' => $operator,
-        ];
-    }
-
-    public function nodes(): array
-    {
-        return $this->nodes;
-    }
-
-    public function attributes(): array
-    {
-        return $this->attributes;
+        $this->operator = $operator;
+        $this->left = $left;
+        $this->right = $right;
     }
 
     public function evaluate(): Number
     {
-        $operator = $this->attributes['operator'];
-        $left = $this->nodes['left']->evaluate();
-        $right = $this->nodes['right']->evaluate();
-        switch ($operator) {
+        $left = $this->left->evaluate();
+        $right = $this->right->evaluate();
+        switch ($this->operator) {
             case '+':
                 return $left->add($right);
             case '-':
@@ -55,8 +46,10 @@ final class BinaryNode implements NodeInterface
                 return $left->divide($right);
             case '%':
                 return $left->modulus($right);
+            case '^':
+                return $left->pow($right);
         }
 
-        // TODO: throw
+        throw SyntaxError::unknownOperator($this->operator);
     }
 }

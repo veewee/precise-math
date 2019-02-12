@@ -8,7 +8,7 @@ use Phpro\PreciseMath\Exception\SyntaxError;
 
 final class Lexer
 {
-    public function parse(string $expression)
+    public function tokenize(string $expression): TokenStream
     {
         $expression = str_replace(["\r", "\n", "\t", "\v", "\f"], ' ', $expression);
         $cursor = 0;
@@ -33,28 +33,25 @@ final class Lexer
                 ++$cursor;
             } elseif (')' === $expression[$cursor]) {
                 if (empty($brackets)) {
-                    throw SyntaxError::fromExpressionCursor('Unexpected ")"', $cursor, $expression);
+                    throw SyntaxError::unexpectedCharacter($expression[$cursor], $cursor, $expression);
                 }
 
                 array_pop($brackets);
                 $tokens[] = new Token(Token::PUNCTUATION_TYPE, $expression[$cursor], $cursor + 1);
                 ++$cursor;
-            } elseif (false !== mb_strpos('+-*/%', $expression[$cursor])) {
+            } elseif (false !== mb_strpos('+-*/%^', $expression[$cursor])) {
                 $tokens[] = new Token(Token::OPERATOR_TYPE, $expression[$cursor], $cursor + 1);
                 ++$cursor;
             } else {
-                throw SyntaxError::fromExpressionCursor('Unexpected character "'.$expression[$cursor].'"', $cursor, $expression);
+                throw SyntaxError::unexpectedCharacter($expression[$cursor], $cursor, $expression);
             }
         }
 
         $tokens[] = Token::eof($cursor + 1);
         if (!empty($brackets)) {
             [$expect, $bracketCursor] = array_pop($brackets);
-            throw SyntaxError::fromExpressionCursor(
-                sprintf('Unclosed "%s"', $expect),
-                $bracketCursor,
-                $expression
-            );
+
+            throw SyntaxError::unclosedParenthesis($expect, $bracketCursor, $expression);
         }
 
         return new TokenStream($tokens, $expression);

@@ -20,7 +20,7 @@ class LexerTest extends TestCase
     public function testTokenValues(string $expression, array $tokens): void
     {
         $lexer = new Lexer();
-        $stream = $lexer->parse($expression);
+        $stream = $lexer->tokenize($expression);
 
         $normalizedExpression = str_replace(["\r", "\n", "\t", "\v", "\f"], ' ', $expression);
         $this->assertSame($normalizedExpression, $stream->expression());
@@ -42,7 +42,7 @@ class LexerTest extends TestCase
         $this->expectException(SyntaxError::class);
 
         $lexer = new Lexer();
-        $lexer->parse($expression);
+        $lexer->tokenize($expression);
     }
 
     public function provideExpressions()
@@ -108,6 +108,12 @@ class LexerTest extends TestCase
                 '%',
                 [
                     new Token(Token::OPERATOR_TYPE, '%', 1),
+                ],
+            ],
+            [
+                '^',
+                [
+                    new Token(Token::OPERATOR_TYPE, '^', 1),
                 ],
             ],
             [

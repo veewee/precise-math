@@ -9,41 +9,26 @@ use Phpro\PreciseMath\Model\Number;
 final class UnaryNode implements NodeInterface
 {
     /**
-     * @var NodeInterface[]
+     * @var string
      */
-    private $nodes;
+    private $operator;
 
     /**
-     * @var array
+     * @var NodeInterface
      */
-    private $attributes;
+    private $node;
 
     public function __construct(string $operator, NodeInterface $node)
     {
-        $this->nodes = [
-            'node' => $node,
-        ];
-        $this->attributes = [
-            'operator' => $operator,
-        ];
-    }
-
-    public function nodes(): array
-    {
-        return $this->nodes;
-    }
-
-    public function attributes(): array
-    {
-        return $this->attributes;
+        $this->operator = $operator;
+        $this->node = $node;
     }
 
     public function evaluate(): Number
     {
-        $number = $this->nodes['node']->evaluate();
-        switch ($this->attributes['operator']) {
-            case '-':
-                return Number::fromScalar('-'.$number->value(), $number->scale());
+        $number = $this->node->evaluate();
+        if ('-' === $this->operator) {
+            return $number->multiply(Number::fromScalar('-1'));
         }
 
         return $number;

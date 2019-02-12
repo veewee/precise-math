@@ -37,6 +37,8 @@ final class Parser
             '-' => ['precedence' => 30],
             '*' => ['precedence' => 60],
             '/' => ['precedence' => 60],
+            '^' => ['precedence' => 60],
+            '%' => ['precedence' => 200],
         ];
     }
 
@@ -45,11 +47,7 @@ final class Parser
         $node = $this->parseExpression($stream, 0);
 
         if (!$stream->isEOF()) {
-            throw SyntaxError::fromExpressionCursor(
-                sprintf('Unexpected token "%s" of value "%s"', $stream->current()->type(), $stream->current()->value()),
-                $stream->current()->cursor(),
-                $stream->expression()
-            );
+            throw SyntaxError::unexpectedToken($stream->current(), $stream->expression());
         }
 
         return $node;
@@ -98,17 +96,13 @@ final class Parser
     private function parsePrimaryExpression(TokenStream $stream): NodeInterface
     {
         $token = $stream->current();
-        switch ($token->type()) {
-            case Token::NUMBER_TYPE:
-                $stream->next();
 
-                return new Node\NumberNode(Number::fromScalar($token->value()));
-            default:
-                throw SyntaxError::fromExpressionCursor(
-                    sprintf('Unexpected token "%s" of value "%s"', $token->type(), $token->value()),
-                    $token->cursor(),
-                    $stream->expression()
-                );
+        if (Token::NUMBER_TYPE === $token->type()) {
+            $stream->next();
+
+            return new Node\NumberNode(Number::fromScalar($token->value()));
         }
+
+        throw SyntaxError::unexpectedToken($token, $stream->expression());
     }
 }
