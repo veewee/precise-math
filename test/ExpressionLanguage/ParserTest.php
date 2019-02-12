@@ -10,7 +10,7 @@ use Phpro\PreciseMath\ExpressionLanguage\Node;
 use Phpro\PreciseMath\ExpressionLanguage\Parser;
 use Phpro\PreciseMath\ExpressionLanguage\Token;
 use Phpro\PreciseMath\ExpressionLanguage\TokenStream;
-use Phpro\PreciseMath\Model\Number;
+use Phpro\PreciseMath\Model\PreciseNumber;
 use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
@@ -54,32 +54,32 @@ class ParserTest extends TestCase
     {
         return [
             [
-                new Node\NumberNode(Number::fromScalar('12.345')),
+                new Node\NumberNode(PreciseNumber::fromScalar('12.345')),
                 '12.345',
             ],
             [
-                new Node\UnaryNode('-', new Node\NumberNode(Number::fromScalar('12.345'))),
+                new Node\UnaryNode('-', new Node\NumberNode(PreciseNumber::fromScalar('12.345'))),
                 '-12.345',
             ],
             [
-                new Node\UnaryNode('+', new Node\NumberNode(Number::fromScalar('12.345'))),
+                new Node\UnaryNode('+', new Node\NumberNode(PreciseNumber::fromScalar('12.345'))),
                 '+12.345',
             ],
             [
                 new Node\BinaryNode(
                     '-',
-                    new Node\NumberNode(Number::fromScalar('3')),
-                    new Node\NumberNode(Number::fromScalar('3'))
+                    new Node\NumberNode(PreciseNumber::fromScalar('3')),
+                    new Node\NumberNode(PreciseNumber::fromScalar('3'))
                 ),
                 '3 - 3',
             ],
             [
                 new Node\BinaryNode('-',
-                    new Node\NumberNode(Number::fromScalar('3')),
+                    new Node\NumberNode(PreciseNumber::fromScalar('3')),
                     new Node\BinaryNode(
                         '*',
-                        new Node\NumberNode(Number::fromScalar('3')),
-                        new Node\NumberNode(Number::fromScalar('2'))
+                        new Node\NumberNode(PreciseNumber::fromScalar('3')),
+                        new Node\NumberNode(PreciseNumber::fromScalar('2'))
                     )
                 ),
                 '3 - 3 * 2',
@@ -88,34 +88,34 @@ class ParserTest extends TestCase
                 new Node\BinaryNode('*',
                     new Node\BinaryNode(
                         '-',
-                        new Node\NumberNode(Number::fromScalar('3')),
-                        new Node\NumberNode(Number::fromScalar('3'))
+                        new Node\NumberNode(PreciseNumber::fromScalar('3')),
+                        new Node\NumberNode(PreciseNumber::fromScalar('3'))
                     ),
-                    new Node\NumberNode(Number::fromScalar('2'))
+                    new Node\NumberNode(PreciseNumber::fromScalar('2'))
                 ),
                 '(3 - 3) * 2',
             ],
             [
                 new Node\BinaryNode('+',
-                    new Node\NumberNode(Number::fromScalar('1')),
+                    new Node\NumberNode(PreciseNumber::fromScalar('1')),
                     new Node\BinaryNode(
                         '+',
-                        new Node\NumberNode(Number::fromScalar('2')),
-                        new Node\NumberNode(Number::fromScalar('3'))
+                        new Node\NumberNode(PreciseNumber::fromScalar('2')),
+                        new Node\NumberNode(PreciseNumber::fromScalar('3'))
                     )
                 ),
                 '1 + 2 + 3',
             ],
             [
                 new Node\BinaryNode('+',
-                    new Node\NumberNode(Number::fromScalar('1')),
+                    new Node\NumberNode(PreciseNumber::fromScalar('1')),
                     new Node\BinaryNode(
                         '+',
-                        new Node\NumberNode(Number::fromScalar('2')),
+                        new Node\NumberNode(PreciseNumber::fromScalar('2')),
                         new Node\BinaryNode(
                             '+',
-                            new Node\NumberNode(Number::fromScalar('3')),
-                            new Node\NumberNode(Number::fromScalar('4'))
+                            new Node\NumberNode(PreciseNumber::fromScalar('3')),
+                            new Node\NumberNode(PreciseNumber::fromScalar('4'))
                         )
                     )
                 ),
@@ -123,24 +123,24 @@ class ParserTest extends TestCase
             ],
             [
                 new Node\BinaryNode('+',
-                    new Node\UnaryNode('-', new Node\NumberNode(Number::fromScalar('1'))),
+                    new Node\UnaryNode('-', new Node\NumberNode(PreciseNumber::fromScalar('1'))),
                     new Node\BinaryNode(
                         '-',
-                        new Node\NumberNode(Number::fromScalar('2')),
+                        new Node\NumberNode(PreciseNumber::fromScalar('2')),
                         new Node\BinaryNode(
                             '*',
-                            new Node\NumberNode(Number::fromScalar('3')),
+                            new Node\NumberNode(PreciseNumber::fromScalar('3')),
                             new Node\BinaryNode(
                                 '/',
-                                new Node\NumberNode(Number::fromScalar('4')),
+                                new Node\NumberNode(PreciseNumber::fromScalar('4')),
                                 new Node\BinaryNode(
                                     '^',
                                     new Node\BinaryNode(
                                         '%',
-                                        new Node\NumberNode(Number::fromScalar('5')),
-                                        new Node\NumberNode(Number::fromScalar('6'))
+                                        new Node\NumberNode(PreciseNumber::fromScalar('5')),
+                                        new Node\NumberNode(PreciseNumber::fromScalar('6'))
                                     ),
-                                    new Node\NumberNode(Number::fromScalar('7'))
+                                    new Node\NumberNode(PreciseNumber::fromScalar('7'))
                                 )
                             )
                         )

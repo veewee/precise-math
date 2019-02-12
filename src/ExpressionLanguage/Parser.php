@@ -6,7 +6,7 @@ namespace Phpro\PreciseMath\ExpressionLanguage;
 
 use Phpro\PreciseMath\Exception\SyntaxError;
 use Phpro\PreciseMath\ExpressionLanguage\Node\NodeInterface;
-use Phpro\PreciseMath\Model\Number;
+use Phpro\PreciseMath\Model\PreciseNumber;
 
 /**
  * This parser implements a "Precedence climbing" algorithm.
@@ -100,7 +100,7 @@ final class Parser
         if (Token::NUMBER_TYPE === $token->type()) {
             $stream->next();
 
-            return new Node\NumberNode(Number::fromScalar($token->value()));
+            return new Node\NumberNode(PreciseNumber::fromScalar($token->value()));
         }
 
         throw SyntaxError::unexpectedToken($token, $stream->expression());

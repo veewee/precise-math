@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhproTest\PreciseMath\Model;
 
 use BCMathExtended\BC;
-use Phpro\PreciseMath\Model\Number;
+use Phpro\PreciseMath\Model\PreciseNumber;
 use Phpro\PreciseMath\Model\Scale;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +28,7 @@ class ScaleTest extends TestCase
 
     public function testCreateFromNumberValue(): void
     {
-        $number = Number::fromScalar('12.12345');
+        $number = PreciseNumber::fromScalar('12.12345');
         $scale = Scale::fromNumberValue($number);
         $this->assertSame(5, $scale->value());
     }

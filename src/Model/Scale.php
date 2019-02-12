@@ -23,7 +23,7 @@ final class Scale
         return new self(BC::getScale());
     }
 
-    public static function fromNumberValue(Number $number): self
+    public static function fromNumberValue(PreciseNumber $number): self
     {
         return new self(BC::getDecimalsLengthFromNumber($number->value()));
     }

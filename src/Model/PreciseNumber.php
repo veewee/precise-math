@@ -7,7 +7,7 @@ namespace Phpro\PreciseMath\Model;
 use BCMathExtended\BC;
 use Phpro\PreciseMath\Exception\RuntimeException;
 
-final class Number
+final class PreciseNumber
 {
     /**
      * @var string
@@ -40,7 +40,7 @@ final class Number
         return $this->scale;
     }
 
-    public function add(Number $number): self
+    public function add(PreciseNumber $number): self
     {
         return $this->runWithErrorHandling(function () use ($number): self {
             $largestScale = $this->scale()->largest($number->scale());
@@ -49,7 +49,7 @@ final class Number
         });
     }
 
-    public function compare(Number $number): int
+    public function compare(PreciseNumber $number): int
     {
         return $this->runWithErrorHandling(function () use ($number): int {
             $largestScale = $this->scale()->largest($number->scale());
@@ -58,32 +58,32 @@ final class Number
         });
     }
 
-    public function isGreaterThan(Number $number): bool
+    public function isGreaterThan(PreciseNumber $number): bool
     {
         return BC::COMPARE_LEFT_GRATER === $this->compare($number);
     }
 
-    public function isEqualOrGreaterThan(Number $number): bool
+    public function isEqualOrGreaterThan(PreciseNumber $number): bool
     {
         return $this->compare($number) >= BC::COMPARE_EQUAL;
     }
 
-    public function isEqual(Number $number): bool
+    public function isEqual(PreciseNumber $number): bool
     {
         return BC::COMPARE_EQUAL === $this->compare($number);
     }
 
-    public function isLowerThan(Number $number): bool
+    public function isLowerThan(PreciseNumber $number): bool
     {
         return BC::COMPARE_RIGHT_GRATER === $this->compare($number);
     }
 
-    public function isEqualOrLowerThan(Number $number): bool
+    public function isEqualOrLowerThan(PreciseNumber $number): bool
     {
         return $this->compare($number) <= BC::COMPARE_EQUAL;
     }
 
-    public function divide(Number $divisor): self
+    public function divide(PreciseNumber $divisor): self
     {
         return $this->runWithErrorHandling(function () use ($divisor): self {
             $largestScale = $this->scale()->largest($divisor->scale());
@@ -92,7 +92,7 @@ final class Number
         });
     }
 
-    public function modulus(Number $divisor): self
+    public function modulus(PreciseNumber $divisor): self
     {
         return $this->runWithErrorHandling(function () use ($divisor): self {
             $largestScale = $this->scale()->largest($divisor->scale());
@@ -101,7 +101,7 @@ final class Number
         });
     }
 
-    public function multiply(Number $number): self
+    public function multiply(PreciseNumber $number): self
     {
         return $this->runWithErrorHandling(function () use ($number): self {
             $largestScale = $this->scale()->largest($number->scale());
@@ -110,7 +110,7 @@ final class Number
         });
     }
 
-    public function pow(Number $exponent): self
+    public function pow(PreciseNumber $exponent): self
     {
         return $this->runWithErrorHandling(function () use ($exponent): self {
             $largestScale = $this->scale()->largest($exponent->scale());
@@ -119,7 +119,7 @@ final class Number
         });
     }
 
-    public function powMod(Number $exponent, Number $modulus): self
+    public function powMod(PreciseNumber $exponent, PreciseNumber $modulus): self
     {
         return $this->runWithErrorHandling(function () use ($exponent, $modulus): self {
             $largestScale = $this->scale()->largest($exponent->scale(), $modulus->scale());
@@ -140,7 +140,7 @@ final class Number
         );
     }
 
-    public function subtract(Number $number): self
+    public function subtract(PreciseNumber $number): self
     {
         return $this->runWithErrorHandling(function () use ($number): self {
             $largestScale = $this->scale()->largest($number->scale());

@@ -6,7 +6,7 @@ namespace PhproTest\PreciseMath\ExpressionLanguage;
 
 use Phpro\PreciseMath\ExpressionLanguage\Node\NumberNode;
 use Phpro\PreciseMath\ExpressionLanguage\Node\UnaryNode;
-use Phpro\PreciseMath\Model\Number;
+use Phpro\PreciseMath\Model\PreciseNumber;
 
 class UnaryNodeTest extends AbstractNodeTest
 {
@@ -14,20 +14,20 @@ class UnaryNodeTest extends AbstractNodeTest
     {
         return [
             [
-                Number::fromScalar('1.23'),
-                new UnaryNode('+', new NumberNode(Number::fromScalar('1.23'))),
+                PreciseNumber::fromScalar('1.23'),
+                new UnaryNode('+', new NumberNode(PreciseNumber::fromScalar('1.23'))),
             ],
             [
-                Number::fromScalar('-1.234'),
-                new UnaryNode('-', new NumberNode(Number::fromScalar('1.234'))),
+                PreciseNumber::fromScalar('-1.234'),
+                new UnaryNode('-', new NumberNode(PreciseNumber::fromScalar('1.234'))),
             ],
             [
-                Number::fromScalar('1.234'),
-                new UnaryNode('-', new NumberNode(Number::fromScalar('-1.234'))),
+                PreciseNumber::fromScalar('1.234'),
+                new UnaryNode('-', new NumberNode(PreciseNumber::fromScalar('-1.234'))),
             ],
             [
-                Number::fromScalar('1.234'),
-                new UnaryNode('', new NumberNode(Number::fromScalar('1.234'))),
+                PreciseNumber::fromScalar('1.234'),
+                new UnaryNode('', new NumberNode(PreciseNumber::fromScalar('1.234'))),
             ],
         ];
     }

@@ -7,7 +7,7 @@ namespace PhproTest\PreciseMath\ExpressionLanguage;
 use Phpro\PreciseMath\Exception\SyntaxError;
 use Phpro\PreciseMath\ExpressionLanguage\Node\BinaryNode;
 use Phpro\PreciseMath\ExpressionLanguage\Node\NumberNode;
-use Phpro\PreciseMath\Model\Number;
+use Phpro\PreciseMath\Model\PreciseNumber;
 
 class BinaryNodeTest extends AbstractNodeTest
 {
@@ -15,51 +15,51 @@ class BinaryNodeTest extends AbstractNodeTest
     {
         return [
             [
-                Number::fromScalar('1.23')->add(Number::fromScalar('2.34')),
+                PreciseNumber::fromScalar('1.23')->add(PreciseNumber::fromScalar('2.34')),
                 new BinaryNode(
                     '+',
-                    new NumberNode(Number::fromScalar('1.23')),
-                    new NumberNode(Number::fromScalar('2.34'))
+                    new NumberNode(PreciseNumber::fromScalar('1.23')),
+                    new NumberNode(PreciseNumber::fromScalar('2.34'))
                 ),
             ],
             [
-                Number::fromScalar('1.23')->subtract(Number::fromScalar('2.34')),
+                PreciseNumber::fromScalar('1.23')->subtract(PreciseNumber::fromScalar('2.34')),
                 new BinaryNode(
                     '-',
-                    new NumberNode(Number::fromScalar('1.23')),
-                    new NumberNode(Number::fromScalar('2.34'))
+                    new NumberNode(PreciseNumber::fromScalar('1.23')),
+                    new NumberNode(PreciseNumber::fromScalar('2.34'))
                 ),
             ],
             [
-                Number::fromScalar('1.23')->multiply(Number::fromScalar('2.34')),
+                PreciseNumber::fromScalar('1.23')->multiply(PreciseNumber::fromScalar('2.34')),
                 new BinaryNode(
                     '*',
-                    new NumberNode(Number::fromScalar('1.23')),
-                    new NumberNode(Number::fromScalar('2.34'))
+                    new NumberNode(PreciseNumber::fromScalar('1.23')),
+                    new NumberNode(PreciseNumber::fromScalar('2.34'))
                 ),
             ],
             [
-                Number::fromScalar('1.23')->divide(Number::fromScalar('2.34')),
+                PreciseNumber::fromScalar('1.23')->divide(PreciseNumber::fromScalar('2.34')),
                 new BinaryNode(
                     '/',
-                    new NumberNode(Number::fromScalar('1.23')),
-                    new NumberNode(Number::fromScalar('2.34'))
+                    new NumberNode(PreciseNumber::fromScalar('1.23')),
+                    new NumberNode(PreciseNumber::fromScalar('2.34'))
                 ),
             ],
             [
-                Number::fromScalar('1.23')->modulus(Number::fromScalar('2.34')),
+                PreciseNumber::fromScalar('1.23')->modulus(PreciseNumber::fromScalar('2.34')),
                 new BinaryNode(
                     '%',
-                    new NumberNode(Number::fromScalar('1.23')),
-                    new NumberNode(Number::fromScalar('2.34'))
+                    new NumberNode(PreciseNumber::fromScalar('1.23')),
+                    new NumberNode(PreciseNumber::fromScalar('2.34'))
                 ),
             ],
             [
-                Number::fromScalar('1.23')->pow(Number::fromScalar('2.34')),
+                PreciseNumber::fromScalar('1.23')->pow(PreciseNumber::fromScalar('2.34')),
                 new BinaryNode(
                     '^',
-                    new NumberNode(Number::fromScalar('1.23')),
-                    new NumberNode(Number::fromScalar('2.34'))
+                    new NumberNode(PreciseNumber::fromScalar('1.23')),
+                    new NumberNode(PreciseNumber::fromScalar('2.34'))
                 ),
             ],
         ];
@@ -70,8 +70,8 @@ class BinaryNodeTest extends AbstractNodeTest
         $this->expectException(SyntaxError::class);
         $node = new BinaryNode(
             'unknownoperator',
-            new NumberNode(Number::fromScalar('1.23')),
-            new NumberNode(Number::fromScalar('2.34'))
+            new NumberNode(PreciseNumber::fromScalar('1.23')),
+            new NumberNode(PreciseNumber::fromScalar('2.34'))
         );
         $node->evaluate();
     }

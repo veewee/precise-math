@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Phpro\PreciseMath\ExpressionLanguage\Node;
 
-use Phpro\PreciseMath\Model\Number;
+use Phpro\PreciseMath\Model\PreciseNumber;
 
 final class UnaryNode implements NodeInterface
 {
@@ -24,11 +24,11 @@ final class UnaryNode implements NodeInterface
         $this->node = $node;
     }
 
-    public function evaluate(): Number
+    public function evaluate(): PreciseNumber
     {
         $number = $this->node->evaluate();
         if ('-' === $this->operator) {
-            return $number->multiply(Number::fromScalar('-1'));
+            return $number->multiply(PreciseNumber::fromScalar('-1'));
         }
 
         return $number;

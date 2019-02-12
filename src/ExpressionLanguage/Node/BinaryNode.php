@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Phpro\PreciseMath\ExpressionLanguage\Node;
 
 use Phpro\PreciseMath\Exception\SyntaxError;
-use Phpro\PreciseMath\Model\Number;
+use Phpro\PreciseMath\Model\PreciseNumber;
 
 final class BinaryNode implements NodeInterface
 {
@@ -31,7 +31,7 @@ final class BinaryNode implements NodeInterface
         $this->right = $right;
     }
 
-    public function evaluate(): Number
+    public function evaluate(): PreciseNumber
     {
         $left = $this->left->evaluate();
         $right = $this->right->evaluate();
