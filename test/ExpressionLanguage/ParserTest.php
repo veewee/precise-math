@@ -40,6 +40,35 @@ class ParserTest extends TestCase
         ], '1234 1234'));
     }
 
+    public function testPrecedences(): void
+    {
+        $reflected = new \ReflectionClass(Parser::class);
+        $unwind = function (array $info): int {
+            return $info['precedence'];
+        };
+
+        $reflectedBinaryOperators = $reflected->getProperty('binaryOperators');
+        $reflectedBinaryOperators->setAccessible(true);
+
+        $reflectedUnaryOperators = $reflected->getProperty('unaryOperators');
+        $reflectedUnaryOperators->setAccessible(true);
+
+        $binaryOperators = array_map($unwind, $reflectedBinaryOperators->getValue());
+        $unaryOperators = array_map($unwind, $reflectedUnaryOperators->getValue());
+
+        $this->assertEquals($binaryOperators['+'], $binaryOperators['-']);
+
+        $this->assertGreaterThan($binaryOperators['+'], $binaryOperators['*']);
+        $this->assertEquals($binaryOperators['*'], $binaryOperators['/']);
+        $this->assertEquals($binaryOperators['*'], $binaryOperators['^']);
+        $this->assertEquals($binaryOperators['/'], $binaryOperators['^']);
+
+        $this->assertGreaterThan($binaryOperators['*'], $binaryOperators['%']);
+
+        $this->assertGreaterThan($binaryOperators['%'], $unaryOperators['+']);
+        $this->assertEquals($unaryOperators['+'], $unaryOperators['-']);
+    }
+
     /**
      * @dataProvider provideParseData
      */
@@ -93,7 +122,21 @@ class ParserTest extends TestCase
                     ),
                     new Node\NumberNode(PreciseNumber::fromScalar('2'))
                 ),
-                '(3 - 3) * 2',
+                '((3 - 3) * 2)',
+            ],
+            [
+                new Node\UnaryNode(
+                    '-',
+                    new Node\BinaryNode('*',
+                        new Node\BinaryNode(
+                            '-',
+                            new Node\NumberNode(PreciseNumber::fromScalar('3')),
+                            new Node\NumberNode(PreciseNumber::fromScalar('3'))
+                        ),
+                        new Node\NumberNode(PreciseNumber::fromScalar('2'))
+                    )
+                ),
+                '-((3 - 3) * 2)',
             ],
             [
                 new Node\BinaryNode('+',
@@ -110,7 +153,7 @@ class ParserTest extends TestCase
                 new Node\BinaryNode('+',
                     new Node\NumberNode(PreciseNumber::fromScalar('1')),
                     new Node\BinaryNode(
-                        '+',
+                        '-',
                         new Node\NumberNode(PreciseNumber::fromScalar('2')),
                         new Node\BinaryNode(
                             '+',
@@ -119,7 +162,7 @@ class ParserTest extends TestCase
                         )
                     )
                 ),
-                '1 + 2 + 3 + 4',
+                '1 + 2 - 3 + 4',
             ],
             [
                 new Node\BinaryNode('+',

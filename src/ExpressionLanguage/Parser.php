@@ -19,28 +19,22 @@ final class Parser
     /**
      * @var array
      */
-    private $binaryOperators;
+    private static $binaryOperators = [
+        '+' => ['precedence' => 3],
+        '-' => ['precedence' => 3],
+        '*' => ['precedence' => 6],
+        '/' => ['precedence' => 6],
+        '^' => ['precedence' => 6],
+        '%' => ['precedence' => 15],
+    ];
 
     /**
      * @var array
      */
-    private $unaryOperators;
-
-    public function __construct()
-    {
-        $this->unaryOperators = [
-            '-' => ['precedence' => 500],
-            '+' => ['precedence' => 500],
-        ];
-        $this->binaryOperators = [
-            '+' => ['precedence' => 30],
-            '-' => ['precedence' => 30],
-            '*' => ['precedence' => 60],
-            '/' => ['precedence' => 60],
-            '^' => ['precedence' => 60],
-            '%' => ['precedence' => 200],
-        ];
-    }
+    private static $unaryOperators = [
+        '-' => ['precedence' => 20],
+        '+' => ['precedence' => 20],
+    ];
 
     public function parse(TokenStream $stream): NodeInterface
     {
@@ -58,10 +52,10 @@ final class Parser
         $node = $this->getPrimary($stream);
         $token = $stream->current();
         while ($token->test(Token::OPERATOR_TYPE)
-               && isset($this->binaryOperators[$token->value()])
-               && $this->binaryOperators[$token->value()]['precedence'] >= $precedence
+               && array_key_exists($token->value(), self::$binaryOperators)
+               && self::$binaryOperators[$token->value()]['precedence'] >= $precedence
         ) {
-            $operatorInfo = $this->binaryOperators[$token->value()];
+            $operatorInfo = self::$binaryOperators[$token->value()];
             $stream->next();
             $right = $this->parseExpression($stream, $operatorInfo['precedence']);
             $node = new Node\BinaryNode($token->value(), $node, $right);
@@ -74,8 +68,8 @@ final class Parser
     private function getPrimary(TokenStream $stream): NodeInterface
     {
         $token = $stream->current();
-        if ($token->test(Token::OPERATOR_TYPE) && array_key_exists($token->value(), $this->unaryOperators)) {
-            $operatorInfo = $this->unaryOperators[$token->value()];
+        if ($token->test(Token::OPERATOR_TYPE) && array_key_exists($token->value(), self::$unaryOperators)) {
+            $operatorInfo = self::$unaryOperators[$token->value()];
             $stream->next();
             $expression = $this->parseExpression($stream, $operatorInfo['precedence']);
 
