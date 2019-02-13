@@ -6,6 +6,9 @@ namespace Phpro\PreciseMath\ExpressionLanguage\Node;
 
 use Phpro\PreciseMath\Model\PreciseNumber;
 
+/**
+ * @internal
+ */
 final class UnaryNode implements NodeInterface
 {
     /**

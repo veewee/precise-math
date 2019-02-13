@@ -11,6 +11,8 @@ use Phpro\PreciseMath\Model\PreciseNumber;
 /**
  * This parser implements a "Precedence climbing" algorithm.
  *
+ * @internal
+ *
  * @see http://www.engr.mun.ca/~theo/Misc/exp_parsing.htm
  * @see http://en.wikipedia.org/wiki/Operator-precedence_parser
  */
@@ -38,7 +40,7 @@ final class Parser
 
     public function parse(TokenStream $stream): NodeInterface
     {
-        $node = $this->parseExpression($stream, 0);
+        $node = $this->parseExpression($stream);
 
         if (!$stream->isEOF()) {
             throw SyntaxError::unexpectedToken($stream->current(), $stream->expression());
@@ -47,7 +49,7 @@ final class Parser
         return $node;
     }
 
-    private function parseExpression(TokenStream $stream, int $precedence): NodeInterface
+    private function parseExpression(TokenStream $stream, int $precedence = 0): NodeInterface
     {
         $node = $this->getPrimary($stream);
         $token = $stream->current();
@@ -78,7 +80,7 @@ final class Parser
 
         if ($token->test(Token::PUNCTUATION_TYPE, '(')) {
             $stream->next();
-            $expression = $this->parseExpression($stream, 0);
+            $expression = $this->parseExpression($stream);
             $stream->expect(Token::PUNCTUATION_TYPE, ')', 'An opened parenthesis is not properly closed');
 
             return $expression;

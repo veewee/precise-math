@@ -6,6 +6,9 @@ namespace Phpro\PreciseMath\ExpressionLanguage;
 
 use Phpro\PreciseMath\Exception\SyntaxError;
 
+/**
+ * @internal
+ */
 final class TokenStream
 {
     /**

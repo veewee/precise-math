@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Phpro\PreciseMath\ExpressionLanguage;
 
+/**
+ * @internal
+ */
 final class Token
 {
     public const NUMBER_TYPE = 'number';

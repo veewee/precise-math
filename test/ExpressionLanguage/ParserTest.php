@@ -15,29 +15,16 @@ use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
 {
-    public function testInvalidTokens(): void
+    /**
+     * @dataProvider provideInvalidTokenStreams
+     */
+    public function testInvalidTokenStreams(TokenStream $tokenStream, string $message): void
     {
         $this->expectException(SyntaxError::class);
-        $this->expectExceptionMessage('Unexpected token "unknownType" of value "1234" around position 1 for expression `1234`.');
+        $this->expectExceptionMessage($message);
 
         $parser = new Parser();
-        $parser->parse(new TokenStream([
-            new Token('unknownType', '1234', 1),
-            Token::eof(2),
-        ], '1234'));
-    }
-
-    public function testExpectEofAtEnd(): void
-    {
-        $this->expectException(SyntaxError::class);
-        $this->expectExceptionMessage('Unexpected token "number" of value "1234" around position 6 for expression `1234 1234`.');
-
-        $parser = new Parser();
-        $parser->parse(new TokenStream([
-            new Token(Token::NUMBER_TYPE, '1234', 1),
-            new Token(Token::NUMBER_TYPE, '1234', 6),
-            Token::eof(10),
-        ], '1234 1234'));
+        $parser->parse($tokenStream);
     }
 
     public function testPrecedences(): void
@@ -190,6 +177,56 @@ class ParserTest extends TestCase
                     )
                 ),
                 '-1 + 2 - 3 * 4 / 5%6 ^ 7',
+            ],
+        ];
+    }
+
+    public function provideInvalidTokenStreams(): array
+    {
+        return [
+            [
+                new TokenStream(
+                    [
+                        new Token('unknownType', '1234', 1),
+                        Token::eof(2),
+                    ],
+                    '1234'
+                ),
+                'Unexpected token "unknownType" of value "1234" around position 1 for expression `1234`.',
+            ],
+            [
+                new TokenStream(
+                    [
+                        new Token(Token::NUMBER_TYPE, '1234', 1),
+                        new Token(Token::NUMBER_TYPE, '1234', 6),
+                        Token::eof(10),
+                    ],
+                    '1234 1234'
+                ),
+                'Unexpected token "number" of value "1234" around position 6 for expression `1234 1234`.',
+            ],
+            [
+                new TokenStream(
+                    [
+                        new Token(Token::NUMBER_TYPE, '1', 1),
+                        new Token(Token::NUMBER_TYPE, '+', 3), // Invalid type ;-)
+                        new Token(Token::NUMBER_TYPE, '1234', 5),
+                        Token::eof(9),
+                    ],
+                    '1 + 1234'
+                ),
+                'Unexpected token "number" of value "+" around position 3 for expression `1 + 1234`.',
+            ],
+            [
+                new TokenStream(
+                    [
+                        new Token(Token::NUMBER_TYPE, '+', 1), // Invalid type ;-)
+                        new Token(Token::NUMBER_TYPE, '1234', 3),
+                        Token::eof(9),
+                    ],
+                    '+ 1234'
+                ),
+                'Unexpected token "number" of value "1234" around position 3 for expression `+ 1234`.',
             ],
         ];
     }

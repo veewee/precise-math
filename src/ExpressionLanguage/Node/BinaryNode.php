@@ -7,6 +7,9 @@ namespace Phpro\PreciseMath\ExpressionLanguage\Node;
 use Phpro\PreciseMath\Exception\SyntaxError;
 use Phpro\PreciseMath\Model\PreciseNumber;
 
+/**
+ * @internal
+ */
 final class BinaryNode implements NodeInterface
 {
     /**

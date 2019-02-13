@@ -12,14 +12,7 @@
     "@default": true,
     "@number": {
       "ignore": [
-        "Phpro\\PreciseMath\\ExpressionLanguage\\Parser::parse",
-        "Phpro\\PreciseMath\\ExpressionLanguage\\Parser::getPrimary"
-      ]
-    },
-    "LogicalAnd": {
-      "ignore": [
-        "Phpro\\PreciseMath\\ExpressionLanguage\\Parser::parseExpression",
-        "Phpro\\PreciseMath\\ExpressionLanguage\\Parser::getPrimary"
+        "Phpro\\PreciseMath\\ExpressionLanguage\\Parser::parseExpression"
       ]
     },
     "Throw_": {
