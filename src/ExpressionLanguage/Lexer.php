@@ -31,10 +31,12 @@ final class Lexer
                 $tokens[] = new Token(Token::NUMBER_TYPE, $number, $cursor + 1);
                 $cursor += \mb_strlen($match[0]);
             } elseif ('(' === $expression[$cursor]) {
+                // Opening parenthesis
                 $brackets[] = [$expression[$cursor], $cursor];
                 $tokens[] = new Token(Token::PUNCTUATION_TYPE, $expression[$cursor], $cursor + 1);
                 ++$cursor;
             } elseif (')' === $expression[$cursor]) {
+                // Closing parenthesis
                 if (empty($brackets)) {
                     throw SyntaxError::unexpectedCharacter($expression[$cursor], $cursor, $expression);
                 }
@@ -43,8 +45,13 @@ final class Lexer
                 $tokens[] = new Token(Token::PUNCTUATION_TYPE, $expression[$cursor], $cursor + 1);
                 ++$cursor;
             } elseif (false !== mb_strpos('+-*/%^', $expression[$cursor])) {
+                // Operators
                 $tokens[] = new Token(Token::OPERATOR_TYPE, $expression[$cursor], $cursor + 1);
                 ++$cursor;
+            } elseif (preg_match('/[a-zA-Z_][a-zA-Z0-9_]*/A', $expression, $match, 0, $cursor)) {
+                // variable names
+                $tokens[] = new Token(Token::NAME_TYPE, $match[0], $cursor + 1);
+                $cursor += \mb_strlen($match[0]);
             } else {
                 throw SyntaxError::unexpectedCharacter($expression[$cursor], $cursor, $expression);
             }

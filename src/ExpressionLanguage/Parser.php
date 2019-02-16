@@ -92,11 +92,14 @@ final class Parser
     private function parsePrimaryExpression(TokenStream $stream): NodeInterface
     {
         $token = $stream->current();
+        $stream->next();
 
-        if (Token::NUMBER_TYPE === $token->type()) {
-            $stream->next();
-
+        if ($token->test(Token::NUMBER_TYPE)) {
             return new Node\NumberNode(PreciseNumber::fromScalar($token->value()));
+        }
+
+        if ($token->test(Token::NAME_TYPE)) {
+            return new Node\NameNode($token->value());
         }
 
         throw SyntaxError::unexpectedToken($token, $stream->expression());

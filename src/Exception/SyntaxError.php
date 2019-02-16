@@ -59,4 +59,23 @@ final class SyntaxError extends RuntimeException
     {
         return new self('The parser does not know how to handle the operator "'.$operator.'".');
     }
+
+    public static function unknownVariable(string $name, array $variables): self
+    {
+        $message = 'Unknown variable "'.$name.'".';
+
+        $minScore = INF;
+        foreach (array_keys($variables) as $proposal) {
+            $distance = levenshtein($name, $proposal);
+            if ($distance < $minScore) {
+                $guess = $proposal;
+                $minScore = $distance;
+            }
+        }
+        if (isset($guess) && $minScore < 3) {
+            $message .= sprintf(' Did you mean "%s"?', $guess);
+        }
+
+        return new self($message);
+    }
 }

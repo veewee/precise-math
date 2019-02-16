@@ -13,10 +13,11 @@ abstract class AbstractNodeTest extends TestCase
     /**
      * @dataProvider provideEvaluateData
      */
-    public function testEvaluate(PreciseNumber $expected, NodeInterface $node): void
+    public function testEvaluate(PreciseNumber $expected, NodeInterface $node, array $variables = []): void
     {
-        $this->assertSame($expected->value(), $node->evaluate()->value());
-        $this->assertSame($expected->scale()->value(), $node->evaluate()->scale()->value());
+        $evaluated = $node->evaluate($variables);
+        $this->assertSame($expected->value(), $evaluated->value());
+        $this->assertSame($expected->scale()->value(), $evaluated->scale()->value());
     }
 
     /**

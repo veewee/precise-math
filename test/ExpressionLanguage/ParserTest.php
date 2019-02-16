@@ -82,12 +82,24 @@ class ParserTest extends TestCase
                 '+12.345',
             ],
             [
+                new Node\NameNode('x'),
+                'x',
+            ],
+            [
                 new Node\BinaryNode(
                     '-',
                     new Node\NumberNode(PreciseNumber::fromScalar('3')),
                     new Node\NumberNode(PreciseNumber::fromScalar('3'))
                 ),
                 '3 - 3',
+            ],
+            [
+                new Node\BinaryNode(
+                    '-',
+                    new Node\NumberNode(PreciseNumber::fromScalar('3')),
+                    new Node\NameNode('x')
+                ),
+                '3 - x',
             ],
             [
                 new Node\BinaryNode('-',
@@ -118,12 +130,12 @@ class ParserTest extends TestCase
                         new Node\BinaryNode(
                             '-',
                             new Node\NumberNode(PreciseNumber::fromScalar('3')),
-                            new Node\NumberNode(PreciseNumber::fromScalar('3'))
+                            new Node\NameNode('x')
                         ),
                         new Node\NumberNode(PreciseNumber::fromScalar('2'))
                     )
                 ),
-                '-((3 - 3) * 2)',
+                '-((3 - x) * 2)',
             ],
             [
                 new Node\BinaryNode('+',

@@ -13,6 +13,7 @@ final class Token
     public const PUNCTUATION_TYPE = 'punctuation';
     public const OPERATOR_TYPE = 'operator';
     public const EOF_TYPE = 'end of expression';
+    public const NAME_TYPE = 'name';
 
     /**
      * @var string

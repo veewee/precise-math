@@ -73,6 +73,6 @@ class BinaryNodeTest extends AbstractNodeTest
             new NumberNode(PreciseNumber::fromScalar('1.23')),
             new NumberNode(PreciseNumber::fromScalar('2.34'))
         );
-        $node->evaluate();
+        $node->evaluate([]);
     }
 }

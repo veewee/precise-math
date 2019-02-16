@@ -124,6 +124,12 @@ class LexerTest extends TestCase
                 ],
             ],
             [
+                'myVariable',
+                [
+                    new Token(Token::NAME_TYPE, 'myVariable', 1),
+                ],
+            ],
+            [
                 '10.23 + 45',
                 [
                     new Token(Token::NUMBER_TYPE, '10.23', 1),
@@ -145,6 +151,18 @@ class LexerTest extends TestCase
                     new Token(Token::PUNCTUATION_TYPE, ')', 23),
                 ],
             ],
+            [
+                '(x - y)^2',
+                [
+                    new Token(Token::PUNCTUATION_TYPE, '(', 1),
+                    new Token(Token::NAME_TYPE, 'x', 2),
+                    new Token(Token::OPERATOR_TYPE, '-', 4),
+                    new Token(Token::NAME_TYPE, 'y', 6),
+                    new Token(Token::PUNCTUATION_TYPE, ')', 7),
+                    new Token(Token::OPERATOR_TYPE, '^', 8),
+                    new Token(Token::NUMBER_TYPE, '2', 9),
+                ],
+            ],
         ];
     }
 
@@ -155,7 +173,8 @@ class LexerTest extends TestCase
             ['(()'],
             [')'],
             ['())'],
-            ['justdontknowwhattodowithmyself'],
+            ['$phpVariable'],
+            ['ünknôwnSìmböl'],
         ];
     }
 }

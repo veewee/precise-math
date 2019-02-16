@@ -34,10 +34,10 @@ final class BinaryNode implements NodeInterface
         $this->right = $right;
     }
 
-    public function evaluate(): PreciseNumber
+    public function evaluate(array $variables): PreciseNumber
     {
-        $left = $this->left->evaluate();
-        $right = $this->right->evaluate();
+        $left = $this->left->evaluate($variables);
+        $right = $this->right->evaluate($variables);
         switch ($this->operator) {
             case '+':
                 return $left->add($right);

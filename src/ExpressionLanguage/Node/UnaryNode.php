@@ -27,9 +27,9 @@ final class UnaryNode implements NodeInterface
         $this->node = $node;
     }
 
-    public function evaluate(): PreciseNumber
+    public function evaluate(array $variables): PreciseNumber
     {
-        $number = $this->node->evaluate();
+        $number = $this->node->evaluate($variables);
         if ('-' === $this->operator) {
             return $number->multiply(PreciseNumber::fromScalar('-1'));
         }

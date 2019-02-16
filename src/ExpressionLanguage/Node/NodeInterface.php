@@ -14,5 +14,5 @@ interface NodeInterface
     /**
      * Evaluates the node and parses a number.
      */
-    public function evaluate(): PreciseNumber;
+    public function evaluate(array $variables): PreciseNumber;
 }

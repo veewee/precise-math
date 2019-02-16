@@ -21,7 +21,7 @@ final class NumberNode implements NodeInterface
         $this->value = $value;
     }
 
-    public function evaluate(): PreciseNumber
+    public function evaluate(array $variables): PreciseNumber
     {
         return $this->value;
     }

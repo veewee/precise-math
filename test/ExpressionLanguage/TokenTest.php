@@ -53,6 +53,7 @@ class TokenTest extends TestCase
             [Token::PUNCTUATION_TYPE, '(', 4],
             [Token::PUNCTUATION_TYPE, ')', 5],
             [Token::OPERATOR_TYPE, '+', 6],
+            [Token::NAME_TYPE, 'someVariable', 8],
             [Token::EOF_TYPE, '', 7],
             ['unknown', '', 10],
         ];

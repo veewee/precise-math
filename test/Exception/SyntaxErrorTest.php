@@ -151,4 +151,52 @@ class SyntaxErrorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(0, $error->getCode());
         $this->assertNull($error->getPrevious());
     }
+
+    public function testCanBeConstructedFromUnknownVariable(): void
+    {
+        $error = SyntaxError::unknownVariable($variable = 'variable', []);
+
+        $this->assertInstanceOf(SyntaxError::class, $error);
+        $this->assertSame(
+            sprintf(
+                'Unknown variable "%s".',
+                $variable
+            ),
+            $error->getMessage()
+        );
+        $this->assertSame(0, $error->getCode());
+        $this->assertNull($error->getPrevious());
+    }
+
+    public function testCanBeConstructedFromUnknownVariableAndGuessTypos(): void
+    {
+        $error = SyntaxError::unknownVariable($variable = 'someVr', ['someVar' => 1, 'smeVr' => 2, 'SomeVer' => 3]);
+
+        $this->assertInstanceOf(SyntaxError::class, $error);
+        $this->assertSame(
+            sprintf(
+                'Unknown variable "%s". Did you mean "someVar"?',
+                $variable
+            ),
+            $error->getMessage()
+        );
+        $this->assertSame(0, $error->getCode());
+        $this->assertNull($error->getPrevious());
+    }
+
+    public function testCanBeConstructedFromUnknownVariableAndCannotGuessTypos(): void
+    {
+        $error = SyntaxError::unknownVariable($variable = 'someVar', ['some123Var' => 1]);
+
+        $this->assertInstanceOf(SyntaxError::class, $error);
+        $this->assertSame(
+            sprintf(
+                'Unknown variable "%s".',
+                $variable
+            ),
+            $error->getMessage()
+        );
+        $this->assertSame(0, $error->getCode());
+        $this->assertNull($error->getPrevious());
+    }
 }
