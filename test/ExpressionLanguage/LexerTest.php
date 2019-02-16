@@ -130,6 +130,13 @@ class LexerTest extends TestCase
                 ],
             ],
             [
+                '1234myVariable',
+                [
+                    new Token(Token::NUMBER_TYPE, '1234', 1),
+                    new Token(Token::NAME_TYPE, 'myVariable', 5),
+                ],
+            ],
+            [
                 '10.23 + 45',
                 [
                     new Token(Token::NUMBER_TYPE, '10.23', 1),
