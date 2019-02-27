@@ -48,6 +48,10 @@ final class Lexer
                 // Operators
                 $tokens[] = new Token(Token::OPERATOR_TYPE, $expression[$cursor], $cursor + 1);
                 ++$cursor;
+            } elseif (',' === $expression[$cursor]) {
+                // punctuation
+                $tokens[] = new Token(Token::PUNCTUATION_TYPE, $expression[$cursor], $cursor + 1);
+                ++$cursor;
             } elseif (preg_match('/[a-zA-Z_][a-zA-Z0-9_]*/A', $expression, $match, 0, $cursor)) {
                 // variable names
                 $tokens[] = new Token(Token::NAME_TYPE, $match[0], $cursor + 1);

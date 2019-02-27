@@ -62,20 +62,29 @@ final class SyntaxError extends RuntimeException
 
     public static function unknownVariable(string $name, array $variables): self
     {
-        $message = 'Unknown variable "'.$name.'".';
+        return new self('Unknown variable "'.$name.'".'.self::guessName($name, array_keys($variables)));
+    }
 
+    public static function unknownFunction(string $name, array $functions): self
+    {
+        return new self('Unknown function "'.$name.'".'.self::guessName($name, array_keys($functions)));
+    }
+
+    private static function guessName(string $name, array $proposals): string
+    {
         $minScore = INF;
-        foreach (array_keys($variables) as $proposal) {
+        foreach ($proposals as $proposal) {
             $distance = levenshtein($name, $proposal);
             if ($distance < $minScore) {
                 $guess = $proposal;
                 $minScore = $distance;
             }
         }
-        if (isset($guess) && $minScore < 3) {
-            $message .= sprintf(' Did you mean "%s"?', $guess);
+
+        if (!isset($guess) || $minScore >= 3) {
+            return '';
         }
 
-        return new self($message);
+        return sprintf(' Did you mean "%s"?', $guess);
     }
 }

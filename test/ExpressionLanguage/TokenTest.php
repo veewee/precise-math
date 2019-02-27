@@ -7,9 +7,6 @@ namespace PhproTest\PreciseMath\ExpressionLanguage;
 use Phpro\PreciseMath\ExpressionLanguage\Token;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Phpro\PreciseMath\ExpressionLanguage\Token
- */
 class TokenTest extends TestCase
 {
     /**

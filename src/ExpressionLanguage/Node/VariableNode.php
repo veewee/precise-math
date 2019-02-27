@@ -10,20 +10,20 @@ use Phpro\PreciseMath\Model\PreciseNumber;
 /**
  * @internal
  */
-final class NumberNode implements NodeInterface
+final class VariableNode implements NodeInterface
 {
     /**
-     * @var PreciseNumber
+     * @var string
      */
-    private $value;
+    private $name;
 
-    public function __construct(PreciseNumber $value)
+    public function __construct(string $name)
     {
-        $this->value = $value;
+        $this->name = $name;
     }
 
     public function evaluate(AstContext $astContext): PreciseNumber
     {
-        return $this->value;
+        return $astContext->variables()->fetchByName($this->name);
     }
 }

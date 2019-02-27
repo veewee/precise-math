@@ -9,9 +9,6 @@ use Phpro\PreciseMath\Model\PreciseNumber;
 use Phpro\PreciseMath\Model\Scale;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Phpro\PreciseMath\Model\Scale
- */
 class ScaleTest extends TestCase
 {
     public function testConstructor(): void

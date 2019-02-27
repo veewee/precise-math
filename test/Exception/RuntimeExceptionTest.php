@@ -6,9 +6,6 @@ namespace PhproTest\PreciseMath\Exception;
 
 use Phpro\PreciseMath\Exception\RuntimeException;
 
-/**
- * @covers \Phpro\PreciseMath\Exception\RuntimeException
- */
 class RuntimeExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testThrowable(): void

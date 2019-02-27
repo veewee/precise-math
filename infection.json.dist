@@ -12,7 +12,8 @@
     "@default": true,
     "@number": {
       "ignore": [
-        "Phpro\\PreciseMath\\ExpressionLanguage\\Parser::parseExpression"
+        "Phpro\\PreciseMath\\ExpressionLanguage\\Parser::parseExpression",
+        "Phpro\\PreciseMath\\Exception\\SyntaxError::guessName"
       ]
     },
     "Throw_": {

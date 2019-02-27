@@ -9,9 +9,6 @@ use Phpro\PreciseMath\ExpressionLanguage\Lexer;
 use Phpro\PreciseMath\ExpressionLanguage\Token;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Phpro\PreciseMath\ExpressionLanguage\Lexer
- */
 class LexerTest extends TestCase
 {
     /**
@@ -66,6 +63,12 @@ class LexerTest extends TestCase
                 '10.50',
                 [
                     new Token(Token::NUMBER_TYPE, '10.50', 1),
+                ],
+            ],
+            [
+                '.5',
+                [
+                    new Token(Token::NUMBER_TYPE, '.5', 1),
                 ],
             ],
             [
@@ -168,6 +171,28 @@ class LexerTest extends TestCase
                     new Token(Token::PUNCTUATION_TYPE, ')', 7),
                     new Token(Token::OPERATOR_TYPE, '^', 8),
                     new Token(Token::NUMBER_TYPE, '2', 9),
+                ],
+            ],
+            [
+                'my_Function123(2)',
+                [
+                    new Token(Token::NAME_TYPE, 'my_Function123', 1),
+                    new Token(Token::PUNCTUATION_TYPE, '(', 15),
+                    new Token(Token::NUMBER_TYPE, '2', 16),
+                    new Token(Token::PUNCTUATION_TYPE, ')', 17),
+                ],
+            ],
+            [
+                'my_Function123(x - y, 2)',
+                [
+                    new Token(Token::NAME_TYPE, 'my_Function123', 1),
+                    new Token(Token::PUNCTUATION_TYPE, '(', 15),
+                    new Token(Token::NAME_TYPE, 'x', 16),
+                    new Token(Token::OPERATOR_TYPE, '-', 18),
+                    new Token(Token::NAME_TYPE, 'y', 20),
+                    new Token(Token::PUNCTUATION_TYPE, ',', 21),
+                    new Token(Token::NUMBER_TYPE, '2', 23),
+                    new Token(Token::PUNCTUATION_TYPE, ')', 24),
                 ],
             ],
         ];

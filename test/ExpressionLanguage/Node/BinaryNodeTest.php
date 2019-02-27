@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhproTest\PreciseMath\ExpressionLanguage;
+namespace PhproTest\PreciseMath\ExpressionLanguage\Node;
 
 use Phpro\PreciseMath\Exception\SyntaxError;
+use Phpro\PreciseMath\ExpressionLanguage\AstContext;
+use Phpro\PreciseMath\ExpressionLanguage\Collection\FunctionsCollection;
+use Phpro\PreciseMath\ExpressionLanguage\Collection\VariablesCollection;
 use Phpro\PreciseMath\ExpressionLanguage\Node\BinaryNode;
 use Phpro\PreciseMath\ExpressionLanguage\Node\NumberNode;
 use Phpro\PreciseMath\Model\PreciseNumber;
@@ -73,6 +76,6 @@ class BinaryNodeTest extends AbstractNodeTest
             new NumberNode(PreciseNumber::fromScalar('1.23')),
             new NumberNode(PreciseNumber::fromScalar('2.34'))
         );
-        $node->evaluate([]);
+        $node->evaluate(new AstContext(new FunctionsCollection(), new VariablesCollection([])));
     }
 }

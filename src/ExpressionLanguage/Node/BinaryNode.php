@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Phpro\PreciseMath\ExpressionLanguage\Node;
 
 use Phpro\PreciseMath\Exception\SyntaxError;
+use Phpro\PreciseMath\ExpressionLanguage\AstContext;
 use Phpro\PreciseMath\Model\PreciseNumber;
 
 /**
@@ -34,10 +35,10 @@ final class BinaryNode implements NodeInterface
         $this->right = $right;
     }
 
-    public function evaluate(array $variables): PreciseNumber
+    public function evaluate(AstContext $astContext): PreciseNumber
     {
-        $left = $this->left->evaluate($variables);
-        $right = $this->right->evaluate($variables);
+        $left = $this->left->evaluate($astContext);
+        $right = $this->right->evaluate($astContext);
         switch ($this->operator) {
             case '+':
                 return $left->add($right);

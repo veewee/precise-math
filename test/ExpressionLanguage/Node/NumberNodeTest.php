@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhproTest\PreciseMath\ExpressionLanguage;
+namespace PhproTest\PreciseMath\ExpressionLanguage\Node;
 
 use Phpro\PreciseMath\ExpressionLanguage\Node\NumberNode;
 use Phpro\PreciseMath\Model\PreciseNumber;

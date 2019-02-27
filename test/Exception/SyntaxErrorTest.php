@@ -8,9 +8,6 @@ use Phpro\PreciseMath\Exception\RuntimeException;
 use Phpro\PreciseMath\Exception\SyntaxError;
 use Phpro\PreciseMath\ExpressionLanguage\Token;
 
-/**
- * @covers \Phpro\PreciseMath\Exception\SyntaxError
- */
 class SyntaxErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testThrowable(): void
@@ -193,6 +190,54 @@ class SyntaxErrorTest extends \PHPUnit\Framework\TestCase
             sprintf(
                 'Unknown variable "%s".',
                 $variable
+            ),
+            $error->getMessage()
+        );
+        $this->assertSame(0, $error->getCode());
+        $this->assertNull($error->getPrevious());
+    }
+
+    public function testCanBeConstructedFromUnknownFunction(): void
+    {
+        $error = SyntaxError::unknownFunction($function = 'function', []);
+
+        $this->assertInstanceOf(SyntaxError::class, $error);
+        $this->assertSame(
+            sprintf(
+                'Unknown function "%s".',
+                $function
+            ),
+            $error->getMessage()
+        );
+        $this->assertSame(0, $error->getCode());
+        $this->assertNull($error->getPrevious());
+    }
+
+    public function testCanBeConstructedFromUnknownFunctionAndGuessTypos(): void
+    {
+        $error = SyntaxError::unknownFunction($function = 'SomeFn', ['SomeFun' => 1, 'SmeFn' => 2, 'SomeFan' => 3]);
+
+        $this->assertInstanceOf(SyntaxError::class, $error);
+        $this->assertSame(
+            sprintf(
+                'Unknown function "%s". Did you mean "SomeFun"?',
+                $function
+            ),
+            $error->getMessage()
+        );
+        $this->assertSame(0, $error->getCode());
+        $this->assertNull($error->getPrevious());
+    }
+
+    public function testCanBeConstructedFromUnknownFunctionAndCannotGuessTypos(): void
+    {
+        $error = SyntaxError::unknownFunction($function = 'someFunc', ['some123Func' => 1]);
+
+        $this->assertInstanceOf(SyntaxError::class, $error);
+        $this->assertSame(
+            sprintf(
+                'Unknown function "%s".',
+                $function
             ),
             $error->getMessage()
         );

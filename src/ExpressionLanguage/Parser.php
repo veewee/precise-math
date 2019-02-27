@@ -102,9 +102,28 @@ final class Parser
         if ($token->test(Token::NAME_TYPE)) {
             $stream->next();
 
-            return new Node\NameNode($token->value());
+            if ($stream->current()->test(Token::PUNCTUATION_TYPE, '(')) {
+                return new Node\FunctionNode($token->value(), $this->parseArguments($stream));
+            }
+
+            return new Node\VariableNode($token->value());
         }
 
         throw SyntaxError::unexpectedToken($token, $stream->expression());
+    }
+
+    private function parseArguments(TokenStream $stream): array
+    {
+        $arguments = [];
+        $stream->expect(Token::PUNCTUATION_TYPE, '(', 'A list of arguments must begin with an opening parenthesis');
+        while (!$stream->current()->test(Token::PUNCTUATION_TYPE, ')')) {
+            if (!empty($arguments)) {
+                $stream->expect(Token::PUNCTUATION_TYPE, ',', 'Arguments must be separated by a comma');
+            }
+            $arguments[] = $this->parseExpression($stream);
+        }
+        $stream->expect(Token::PUNCTUATION_TYPE, ')', 'A list of arguments must be closed by a parenthesis');
+
+        return $arguments;
     }
 }

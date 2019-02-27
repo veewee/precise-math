@@ -9,9 +9,6 @@ use Phpro\PreciseMath\ExpressionLanguage\Token;
 use Phpro\PreciseMath\ExpressionLanguage\TokenStream;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Phpro\PreciseMath\ExpressionLanguage\TokenStream
- */
 class TokenStreamTest extends TestCase
 {
     public function testItKnowsTheExpression(): void

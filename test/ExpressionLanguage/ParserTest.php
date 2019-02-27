@@ -70,6 +70,10 @@ class ParserTest extends TestCase
     {
         return [
             [
+                new Node\NumberNode(PreciseNumber::fromScalar('.2')),
+                '.2',
+            ],
+            [
                 new Node\NumberNode(PreciseNumber::fromScalar('12.345')),
                 '12.345',
             ],
@@ -82,7 +86,7 @@ class ParserTest extends TestCase
                 '+12.345',
             ],
             [
-                new Node\NameNode('x'),
+                new Node\VariableNode('x'),
                 'x',
             ],
             [
@@ -97,7 +101,7 @@ class ParserTest extends TestCase
                 new Node\BinaryNode(
                     '-',
                     new Node\NumberNode(PreciseNumber::fromScalar('3')),
-                    new Node\NameNode('x')
+                    new Node\VariableNode('x')
                 ),
                 '3 - x',
             ],
@@ -130,7 +134,7 @@ class ParserTest extends TestCase
                         new Node\BinaryNode(
                             '-',
                             new Node\NumberNode(PreciseNumber::fromScalar('3')),
-                            new Node\NameNode('x')
+                            new Node\VariableNode('x')
                         ),
                         new Node\NumberNode(PreciseNumber::fromScalar('2'))
                     )
@@ -190,6 +194,29 @@ class ParserTest extends TestCase
                 ),
                 '-1 + 2 - 3 * 4 / 5%6 ^ 7',
             ],
+            [
+                new Node\FunctionNode(
+                    'my_Function123',
+                    [
+                        new Node\UnaryNode('-', new Node\NumberNode(PreciseNumber::fromScalar('2'))),
+                    ]
+                ),
+                'my_Function123(-2)',
+            ],
+            [
+                new Node\FunctionNode(
+                    'my_Function123',
+                    [
+                        new Node\BinaryNode(
+                            '-',
+                            new Node\VariableNode('x'),
+                            new Node\VariableNode('y')
+                        ),
+                        new Node\NumberNode(PreciseNumber::fromScalar('2')),
+                    ]
+                ),
+                'my_Function123(x - y, 2)',
+            ],
         ];
     }
 
@@ -239,6 +266,31 @@ class ParserTest extends TestCase
                     '+ 1234'
                 ),
                 'Unexpected token "number" of value "1234" around position 3 for expression `+ 1234`.',
+            ],
+            [
+                new TokenStream(
+                    [
+                        new Token(Token::NAME_TYPE, 'myFunction', 1),
+                        new Token(Token::PUNCTUATION_TYPE, '(', 11),
+                        new Token(Token::NAME_TYPE, 'x', 12),
+                        Token::eof(13),
+                    ],
+                    'myFunction(x'
+                ),
+                'Arguments must be separated by a comma. Unexpected token "end of expression" of value "" ("punctuation" expected with value ",") around position 13 for expression `myFunction(x`.',
+            ],
+            [
+                new TokenStream(
+                    [
+                        new Token(Token::NAME_TYPE, 'myFunction', 1),
+                        new Token(Token::PUNCTUATION_TYPE, '(', 11),
+                        new Token(Token::NAME_TYPE, 'x', 12),
+                        new Token(Token::NAME_TYPE, 'y', 14),
+                        Token::eof(15),
+                    ],
+                    'myFunction(x y'
+                ),
+                'Arguments must be separated by a comma. Unexpected token "name" of value "y" ("punctuation" expected with value ",") around position 14 for expression `myFunction(x y`.',
             ],
         ];
     }

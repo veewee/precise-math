@@ -9,9 +9,6 @@ use Phpro\PreciseMath\Exception\RuntimeException;
 use Phpro\PreciseMath\Model\PreciseNumber;
 use Phpro\PreciseMath\Model\Scale;
 
-/**
- * @covers \Phpro\PreciseMath\Model\PreciseNumber
- */
 class PreciseNumberTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorWithScale(): void
